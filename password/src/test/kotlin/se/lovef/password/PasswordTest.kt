@@ -3,7 +3,6 @@ package se.lovef.password
 import org.junit.Test
 import se.lovef.assert.v1.shouldEqual
 import se.lovef.assert.v1.shouldNotEqual
-import se.lovef.assert.v1.throws
 
 private const val exampleSalt = "" +
         "qfTujPRHfCgzAqbo6Ai6aBWCMtqBM9Qr89hsgyWQA9ufyAwvBe2xshhT4VEgiNnUBdHGMLZVGmQ6seQhrdjVnozGZ7uUEEZJNYHq" +
@@ -18,6 +17,13 @@ private const val exampleSalt = "" +
         "n56xXP9e3HWn9Yqz66kb6pKX8gcR5rmB8TswX7ZiJr5aUSdLQNioxeXKmsgcnuWDaMT5bjYbEg3VmXDJvehyMmQvccQ7NcAMTEAQ"
 
 class PasswordTest {
+
+    @Test fun `create hash`() {
+        val hashWithExampleSalt = byteArrayOf(-126, 106, -7, 1, -116, 127, 73, -80, 21, 96, 123, 33, -84,
+            -14, 99, -44, -126, -26, -25, -109, -24, -124, -100, -110, -31, -106, 88, 4, -114, 25, 124, 29)
+        Password.createHash(exampleSalt, "data to hash") shouldEqual hashWithExampleSalt
+        Password.createHash("other salt", "data to hash") shouldNotEqual hashWithExampleSalt
+    }
 
     @Test fun `create Base64 hash`() {
         val hashWithExampleSalt = "gmr5AYx/SbAVYHshrPJj1ILm55PohJyS4ZZYBI4ZfB0="
@@ -35,16 +41,5 @@ class PasswordTest {
         val hashWithExampleSalt = "kxU4AFAtxg8YeweLVhc7REqDPrgbEiGPFHnzLqb8Cga2"
         Password.createReadableHash(exampleSalt, "data to hash") shouldEqual hashWithExampleSalt
         Password.createReadableHash("other salt", "data to hash") shouldNotEqual hashWithExampleSalt
-    }
-
-    @Test fun `convert byte array to string representing number of arbitrary base`() {
-        byteArrayOf(0x0F).toStringOfChars("0123456789ABCDEF") shouldEqual "F"
-        byteArrayOf(0x1F).toStringOfChars("0123456789ABCDEF") shouldEqual "1F"
-        byteArrayOf(-1).toStringOfChars("0123456789ABCDEF") shouldEqual "FF"
-        byteArrayOf(-1, 0x37, 0x0F).toStringOfChars("0123456789ABCDEF") shouldEqual "FF370F"
-        byteArrayOf(15).toStringOfChars("0123456789") shouldEqual "15"
-        byteArrayOf(0b1010).toStringOfChars("01") shouldEqual "1010"
-        byteArrayOf(0).toStringOfChars("01") shouldEqual "0"
-        { byteArrayOf(0).toStringOfChars("") } throws Exception::class
     }
 }
