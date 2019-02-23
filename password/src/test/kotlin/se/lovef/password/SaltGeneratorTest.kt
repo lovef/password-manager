@@ -8,7 +8,7 @@ import se.lovef.assert.v1.shouldNotContain
 class SaltGeneratorTest {
 
     @Test fun `create salt`() {
-        val largeSalt = SaltGenerator.createSalt(10000)
+        val largeSalt = SaltGeneratorImpl.createSalt(10000)
         Letters.alphaNumeric.forEach {
             largeSalt shouldContain it
         }
@@ -19,7 +19,7 @@ class SaltGeneratorTest {
     }
 
     @Test fun `create readable salt`() {
-        val largeSalt = SaltGenerator.createReadableSalt(10000)
+        val largeSalt = SaltGeneratorImpl.createReadableSalt(10000)
         Letters.readableAlphaNumeric.forEach {
             largeSalt shouldContain it
         }

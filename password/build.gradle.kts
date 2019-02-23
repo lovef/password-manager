@@ -8,7 +8,8 @@ group = "se.lovef"
 
 dependencies {
     implementation(kotlin("stdlib"))
-    testImplementation("se.lovef:kotlin-assert-utils:0.8.0")
+    testImplementation("se.lovef:kotlin-assert-utils:0.8.2")
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
 }
 
 repositories {
