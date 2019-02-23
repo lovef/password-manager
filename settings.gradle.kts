@@ -1,4 +1,5 @@
 include(
     "password",
-    "password:test"
+    "password:test",
+    "gradle-plugin"
 )

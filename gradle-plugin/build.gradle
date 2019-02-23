@@ -1,0 +1,61 @@
+
+plugins {
+    id("org.jetbrains.kotlin.jvm") version "1.3.21"
+    id 'java-gradle-plugin'
+    id("com.palantir.idea-test-fix") version "0.1.0"
+    
+    // Will be needed for publish
+//    id("org.jetbrains.dokka") version "0.9.17"
+//    id("com.jfrog.bintray") version "1.8.0"
+//    id("maven-publish")
+//    id("java-library")
+}
+
+
+description = "Experimental Gradle Password Manager Plugin"
+def baseName = "password-manager"
+
+println("$group:$baseName:$version")
+
+dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-stdlib")
+    implementation(gradleApi())
+    implementation(project(":password"))
+
+    testImplementation(gradleTestKit())
+    testImplementation(project(":password:test"))
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    functionalTest {
+        kotlin {
+            srcDir file('src/functionalTest/kotlin')
+        }
+        resources {
+            srcDir file('src/functionalTest/resources')
+        }
+        compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+task functionalTest(type: Test) {
+    testClassesDirs = sourceSets.functionalTest.output.classesDirs
+    classpath = sourceSets.functionalTest.runtimeClasspath
+    testLogging {
+        exceptionFormat = 'full'
+        showStandardStreams = true
+    }
+}
+
+test {
+    testLogging {
+        exceptionFormat = 'full'
+    }
+}
+
+check.dependsOn functionalTest
