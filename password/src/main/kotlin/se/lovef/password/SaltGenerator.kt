@@ -3,25 +3,19 @@ package se.lovef.password
 import java.security.SecureRandom
 
 interface SaltGenerator {
-    fun createSalt(size: Int = 16): String?
-    fun createReadableSalt(size: Int = 16): String?
+    fun createSalt(size: Int = 16): ByteArray
 }
 
 object SaltGeneratorImpl : SaltGenerator {
 
-    private val random = SecureRandom()
+    private val secureRandom = SecureRandom()
 
-    override fun createSalt(size: Int): String? {
-        return createSalt(size, Letters.alphaNumeric)
+    override fun createSalt(size: Int): ByteArray {
+        return ByteArray(size)
+            .also { secureRandom.nextBytes(it) }
     }
 
-    override fun createReadableSalt(size: Int): String? {
-        return createSalt(size, Letters.readableAlphaNumeric)
-    }
-
-    private fun createSalt(size: Int, chars: String): String {
-        return (1..size)
-            .map { chars[random.nextInt(chars.length)] }
-            .joinToString(separator = "")
+    override fun toString(): String {
+        return "SaltGeneratorImpl"
     }
 }

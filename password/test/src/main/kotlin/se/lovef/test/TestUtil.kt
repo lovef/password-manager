@@ -2,6 +2,7 @@ package se.lovef.test
 
 import se.lovef.assert.v1.shouldBeTrue
 import se.lovef.password.DataNumber
+import java.io.File
 import java.math.BigInteger
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
@@ -63,3 +64,26 @@ infix fun String.shouldMatchEntire(regex: Regex) {
         throw java.lang.AssertionError("$regex should match the entire string\n\"${this}\"\nFound $firstFew...")
     }
 }
+
+
+fun File.dir(path: String) = File(this, path)
+
+fun File.properties(path: String): Map<String, String> {
+    if (!this.isDirectory) {
+        throw Exception("$this is not a directory")
+    }
+    val file = File(this, path)
+    return file.properties
+}
+
+val File.properties: Map<String, String>
+    get() {
+        if (!this.isFile) {
+            throw Exception("$this is not a file")
+        }
+        this.isFile
+        return Properties().also { it.load(this.inputStream()) }
+            .entries
+            .map { "${it.key}" to "${it.value}" }
+            .toMap()
+    }
