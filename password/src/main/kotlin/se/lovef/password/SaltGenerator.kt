@@ -2,15 +2,20 @@ package se.lovef.password
 
 import java.security.SecureRandom
 
-object SaltGenerator {
+interface SaltGenerator {
+    fun createSalt(size: Int = 16): String?
+    fun createReadableSalt(size: Int = 16): String?
+}
+
+object SaltGeneratorImpl : SaltGenerator {
 
     private val random = SecureRandom()
 
-    fun createSalt(size: Int = 16): String? {
+    override fun createSalt(size: Int): String? {
         return createSalt(size, Letters.alphaNumeric)
     }
 
-    fun createReadableSalt(size: Int = 16): String? {
+    override fun createReadableSalt(size: Int): String? {
         return createSalt(size, Letters.readableAlphaNumeric)
     }
 
