@@ -12,6 +12,7 @@ class DataNumber {
         value = bigInteger
         maxValue = bigInteger
     }
+
     constructor(value: Long) : this(BigInteger.valueOf(value))
     constructor(bytes: ByteArray) {
         val clone = bytes.clone()
@@ -19,6 +20,7 @@ class DataNumber {
         clone[0] = -1
         maxValue = BigInteger(1, clone)
     }
+
     constructor(data: DataNumber) {
         value = data.value
         maxValue = data.maxValue
@@ -53,9 +55,18 @@ class DataNumber {
     fun list(radix: Int) = iterator(radix).asSequence().toList()
     fun iterator(radix: Int) = Iterator(BigInteger.valueOf(radix.toLong()))
 
-    inner class Iterator(private val radix: BigInteger): kotlin.collections.Iterator<Int> {
+    inner class Iterator(private val radix: BigInteger) : kotlin.collections.Iterator<Int> {
         override fun hasNext() = this@DataNumber.hasNext()
         override fun next() = next(radix)
+    }
+
+    fun list(chars: String) = iterator(chars).asSequence().toList()
+    fun iterator(chars: String) = CharIterator(chars)
+
+    inner class CharIterator(private val chars: String) : kotlin.collections.Iterator<Char> {
+        private val radix = BigInteger.valueOf(chars.length.toLong())
+        override fun hasNext() = this@DataNumber.hasNext()
+        override fun next() = chars[next(radix)]
     }
 
     fun toString(radix: Int): String = value.toString(radix)

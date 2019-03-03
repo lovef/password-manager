@@ -66,6 +66,22 @@ class DataNumberTest {
         DataNumber(0x1234).list(16) shouldEqual listOf(4, 3, 2, 1)
     }
 
+    @Test fun `can take a char from a string`() {
+        DataNumber(0b1010).list("01").reversed().joinToString("") shouldEqual "1010"
+    }
+
+    @Test fun `can take iterate two alphabets from the same data number`() {
+        val data = DataNumber(0xABCDEF)
+        val letterIterator = data.iterator("ABCDEF")
+        val numberIterator = data.iterator("123456")
+        val builder = StringBuilder()
+        while (data.hasNext()) {
+            builder += letterIterator.next()
+            builder += numberIterator.next()
+        }
+        builder.toString() shouldEqual "D3E5F2B5A2"
+    }
+
     @Test fun `can take a binary number`() {
         val number = DataNumber(0b1011)
         (1..5).map { number.next(2) to number.value.toInt() } shouldEqual listOf(
