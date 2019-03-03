@@ -6,7 +6,7 @@ import java.util.concurrent.ThreadLocalRandom
 val random get() = ThreadLocalRandom.current()
 
 fun randomBigInt() = BigInteger(1, randomBytes())
-fun randomBigNumber() = DataNumber(randomBytes())
+fun randomDataNumber() = DataNumber(randomBytes())
 
 fun randomBytes() = randomBytes(10, 100)
 fun randomBytes(length: Int) = randomBytes(length, length + 1)
