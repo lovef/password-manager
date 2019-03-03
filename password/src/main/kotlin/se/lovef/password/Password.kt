@@ -12,10 +12,10 @@ object Password {
     }
 
     fun createPrettyHash(salt: String, data: String) =
-        createHash(salt, data).toStringOfChars(Letters.alphaNumeric)
+        createHash(salt, data).toDataNumber().toStringOfChars(Letters.alphaNumeric)
 
     fun createReadableHash(salt: String, data: String) =
-        createHash(salt, data).toStringOfChars(Letters.readableAlphaNumeric)
+        createHash(salt, data).toDataNumber().toStringOfChars(Letters.readableAlphaNumeric)
 
     fun createHash(salt: String, data: String): ByteArray {
         val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
