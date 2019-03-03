@@ -1,4 +1,5 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import se.lovef.gradle.test.report.server.TestReportTask
 
 plugins {
     kotlin("jvm") version "1.3.21"
@@ -21,3 +22,8 @@ tasks.withType<Test> {
         exceptionFormat = TestExceptionFormat.FULL
     }
 }
+
+tasks.register<TestReportTask>("hello") {
+    
+}
+//task hello(type: TestReportTask)
