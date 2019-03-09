@@ -2,6 +2,7 @@ package se.lovef.password
 
 import se.lovef.assert.v1.shouldBeTrue
 import java.math.BigInteger
+import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
 val random get() = ThreadLocalRandom.current()
@@ -18,6 +19,8 @@ fun randomBytes() = randomBytes(10, 100)
 fun randomBytes(length: Int) = randomBytes(length, length + 1)
 fun randomBytes(from: Int, to: Int) = ByteArray(random.nextInt(from, to))
     .also { random.nextBytes(it) }
+
+fun ByteArray.toBase64() = Base64.getEncoder().encodeToString(this)
 
 inline fun proveThat(vararg messages: Any, proof: () -> Unit) {
     try {

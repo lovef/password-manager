@@ -1,6 +1,8 @@
 package se.lovef.password
 
-class PasswordCompiler {
+import se.lovef.password.hasher.Hasher
+
+class PasswordCompiler(private val hasher: Hasher) {
 
     private val salts = ArrayList<String>()
     private val passwords = ArrayList<String>()
@@ -16,7 +18,7 @@ class PasswordCompiler {
 
     fun withoutDuplicates() = apply { withoutDuplicates = true }
 
-    fun hash() = Password.createHash(salts.compile(), passwords.compile())
+    fun hash() = hasher.hash(salts.compile(), passwords.compile())
 
     private fun ArrayList<String>.compile(): String {
         return let { if (sorted) it.sorted() else it }

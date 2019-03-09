@@ -3,6 +3,7 @@ package se.lovef.password
 import org.junit.Test
 import se.lovef.assert.v1.shouldEqual
 import se.lovef.assert.v1.shouldNotEqual
+import se.lovef.password.hasher.Hasher
 
 class PasswordCompilerTest {
 
@@ -62,7 +63,11 @@ private infix fun PasswordCompiler.hashShouldNotEqual(other: PasswordCompiler) {
     hash() shouldNotEqual other.hash()
 }
 
-private fun compiler() = PasswordCompiler()
+private val hasher = object : Hasher {
+    override fun hash(salt: String, data: String) = (salt + data).toByteArray()
+}
+
+private fun compiler() = PasswordCompiler(hasher)
 private fun PasswordCompiler.pwd() = password("password")
 private fun PasswordCompiler.pwd_1() = password("password 1")
 private fun PasswordCompiler.pwd_2() = password("password 2")
@@ -70,4 +75,4 @@ private fun PasswordCompiler.salt() = salt("salt")
 private fun PasswordCompiler.salt_1() = salt("salt 1")
 private fun PasswordCompiler.salt_2() = salt("salt 2")
 
-private fun hash(salt: String, password: String) = Password.createHash(salt, password)
+private fun hash(salt: String, password: String) = hasher.hash(salt, password)
