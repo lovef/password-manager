@@ -1,9 +1,15 @@
 package se.lovef.password
 
+import se.lovef.assert.v1.shouldBeTrue
 import java.math.BigInteger
 import java.util.concurrent.ThreadLocalRandom
 
 val random get() = ThreadLocalRandom.current()
+
+private val bytes: ByteArray = randomBytes()
+val randomBytes get() = bytes.clone()
+private val dataNumber = DataNumber(randomBytes)
+val randomDataNumber get() = DataNumber(dataNumber)
 
 fun randomBigInt() = BigInteger(1, randomBytes())
 fun randomDataNumber() = DataNumber(randomBytes())
@@ -41,5 +47,15 @@ inline infix fun <T> Iterable<T>.shouldAll(assertion: (T) -> Unit) {
         val failedString = failed.take(10).joinToString()
         val failedMessage = if (failed.size > 10) ", first 10: $failedString" else ": $failedString"
         throw AssertionError("Failed for ${failed.size} elements" + failedMessage, firstError)
+    }
+}
+
+infix fun String.shouldMatchEntire(regex: Regex) {
+    try {
+        matches(regex).shouldBeTrue()
+    } catch (e: Throwable) {
+        val found = regex.findAll(this)
+        val firstFew = found.take(3).joinToString { it.value }
+        throw java.lang.AssertionError("$regex should match the entire string\n\"${this}\"\nFound $firstFew...")
     }
 }

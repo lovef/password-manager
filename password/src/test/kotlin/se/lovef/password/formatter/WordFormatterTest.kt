@@ -4,17 +4,14 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
 import se.lovef.assert.v1.shouldEqual
-import se.lovef.assert.v1.shouldMatch
-import se.lovef.password.DataNumber
-import se.lovef.password.proveThat
-import se.lovef.password.randomDataNumber
-import se.lovef.password.shouldAll
+import se.lovef.password.*
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 private val wordPattern by lazy {
     val v = "[${WordFormatter.vowels}]"
     val c = "[${WordFormatter.consonants}]"
-    "^(($v$c)+|($c$v)+|$c($v$c)+|$v($c$v)+)$".toRegex()
+    "(($v$c)+|($c$v)+|$c($v$c)+|$v($c$v)+)".toRegex()
 }
 
 class WordFormatterTest {
@@ -33,13 +30,12 @@ class WordFormatterTest {
 
     @Test fun `a word should have alternating vowels and consonants`() {
         proveThat(words, "have alternating vowels and consonants") {
-            words shouldAll { it shouldMatch wordPattern }
+            words shouldAll { it shouldMatchEntire wordPattern }
         }
     }
 
     @Test fun `the same data yields the same words`() {
-        val data = DataNumber.fromBytes(-0x3f, -0x33, -0x52, 0x51, 0x7b, 0x7a, -0x2c, 0xb, -0x8, 0x3e, -0x27, -0x51,
-            -0x40, -0x7a, 0x2e, -0x2a, 0x37, -0x24, 0x1e, -0x53, 0x4f, -0x6e, -0x75, 0x6f, -0x77, 0xd, 0x54, 0x76)
+        val data = DataNumber.fromBase64("wc2uUXt61Av4PtmvwIYu1jfcHq1PkotviQ1Udg==")
         val string = data.formatWords().joinToString()
         string shouldEqual "MI, ULAHUNO, QIXEJ, AV, JOFEGETI, ONEKOZA, TER, VANETEM, UKUTOCA, CIGINU, CABABA"
     }
