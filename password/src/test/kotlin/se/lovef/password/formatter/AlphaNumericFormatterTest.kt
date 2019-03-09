@@ -13,7 +13,6 @@ private val pattern = "([0-9a-zA-Z])+".toRegex()
 
 class AlphaNumericFormatterTest {
 
-
     @Test fun `should have correct format`() {
         example shouldMatchEntire pattern
     }
