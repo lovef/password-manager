@@ -4,7 +4,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
 import se.lovef.assert.v1.shouldEqual
+import se.lovef.assert.v1.shouldNotEqual
 import se.lovef.assert.v1.throws
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 private val originalNumber = randomBigInt()
@@ -29,6 +31,18 @@ class DataNumberTest {
         DataNumber.fromBytes(15).toDec() shouldEqual "15"
         DataNumber.fromBytes(0b1010).toBin() shouldEqual "1010"
         DataNumber.fromBytes(0).toHex() shouldEqual "0"
+    }
+
+    @Test fun `check equals`() {
+        randomDataNumber shouldEqual randomDataNumber
+        randomDataNumber shouldNotEqual randomDataNumber()
+        DataNumber.fromBytes(0, 1, 2, 3) shouldNotEqual DataNumber.fromBytes(1, 2, 3)
+    }
+
+    @Test fun `can init with base64`() {
+        val bytes = randomBytes
+        val base64 = Base64.getEncoder().encodeToString(bytes)
+        DataNumber(bytes) shouldEqual DataNumber.fromBase64(base64)
     }
 
     @Test fun `init data is not modified`() {

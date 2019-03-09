@@ -5,7 +5,7 @@ import se.lovef.password.plusAssign
 
 class SentenceFormatter(
     private val wordFormatter: DataNumberFormatter = WordFormatter(),
-    private val digitFormatter: DataNumberFormatter = DigitFormatter()
+    private val digitFormatter: DataNumberFormatter = NumberFormatter()
 ) : DataNumberFormatter {
 
     override fun format(dataNumber: DataNumber): String {
@@ -24,8 +24,3 @@ class SentenceFormatter(
         else -> digitFormatter.format(dataNumber)
     }
 }
-
-interface DataNumberFormatter {
-    fun format(dataNumber: DataNumber): String
-}
-

@@ -1,6 +1,7 @@
 package se.lovef.password
 
 import java.math.BigInteger
+import java.util.*
 
 class DataNumber {
 
@@ -70,9 +71,29 @@ class DataNumber {
     }
 
     fun toString(radix: Int): String = value.toString(radix)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as DataNumber
+
+        if (value != other.value) return false
+        if (maxValue != other.maxValue) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = value.hashCode()
+        result = 31 * result + maxValue.hashCode()
+        return result
+    }
+
 
     companion object {
         fun fromBytes(vararg bytes: Byte) = DataNumber(bytes)
+        fun fromBase64(base64: String?) = DataNumber(Base64.getDecoder().decode(base64))
+
         private val radix2 = BigInteger.valueOf(2)
     }
 }

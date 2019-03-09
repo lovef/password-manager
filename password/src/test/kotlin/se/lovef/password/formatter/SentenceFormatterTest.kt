@@ -29,13 +29,12 @@ class SentenceFormatterTest {
     }
 
     @Test fun `same data always yield the same sentence`() {
-        val data = DataNumber.fromBytes(-0x6b, -0x33, -0x52, 0x51, 0x7b, 0x7a, -0x2c, 0xb, -0x8, 0x3e, -0x27, -0x51,
-            -0x40, -0x7a, 0x2e, -0x2a, 0x37, -0x24, 0x1e, -0x53, 0x4f, -0x6e, -0x75, 0x6f, -0x77, 0xd, 0x54, 0x76)
+        val data = DataNumber.fromBase64("lc2uUXt61Av4PtmvwIYu1jfcHq1PkotviQ1Udg==")
         SentenceFormatter().format(data) shouldEqual "Epawihab URUWILA 335 Utamopan Upataboj AKA UBUDE Ca 36 On QOBABA"
     }
 
     @Test fun `different byte arrays yields different sentences`() {
-        randomDataNumber().formatSentence() shouldNotEqual randomDataNumber().formatSentence()
+        randomDataNumber.formatSentence() shouldNotEqual randomDataNumber().formatSentence()
     }
 }
 
