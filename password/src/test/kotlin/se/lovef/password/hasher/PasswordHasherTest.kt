@@ -1,8 +1,10 @@
-package se.lovef.password
+package se.lovef.password.hasher
 
 import org.junit.Test
 import se.lovef.assert.v1.shouldEqual
 import se.lovef.assert.v1.shouldNotEqual
+import se.lovef.password.shouldAll
+import se.lovef.password.toBase64
 
 private const val exampleSalt = "" +
         "qfTujPRHfCgzAqbo6Ai6aBWCMtqBM9Qr89hsgyWQA9ufyAwvBe2xshhT4VEgiNnUBdHGMLZVGmQ6seQhrdjVnozGZ7uUEEZJNYHq" +
@@ -16,30 +18,34 @@ private const val exampleSalt = "" +
         "KCWcatEYfkeCGDttyKkkSEMFY75rHfiiJejTMmAxfEsvkfdSBfuTHzhZoYPBDEAJnLuqbFQipeA9UZK7jMf8bmx2R9NCdt9w7jQC" +
         "n56xXP9e3HWn9Yqz66kb6pKX8gcR5rmB8TswX7ZiJr5aUSdLQNioxeXKmsgcnuWDaMT5bjYbEg3VmXDJvehyMmQvccQ7NcAMTEAQ"
 
-class PasswordTest {
+private const val exampleData = "data to hash"
+
+class PasswordHasherTest {
+
+    private var passwordHasher = PasswordHasher()
 
     @Test fun `create hash`() {
-        val hashWithExampleSalt = byteArrayOf(-126, 106, -7, 1, -116, 127, 73, -80, 21, 96, 123, 33, -84,
-            -14, 99, -44, -126, -26, -25, -109, -24, -124, -100, -110, -31, -106, 88, 4, -114, 25, 124, 29)
-        Password.createHash(exampleSalt, "data to hash") shouldEqual hashWithExampleSalt
-        Password.createHash("other salt", "data to hash") shouldNotEqual hashWithExampleSalt
-    }
-
-    @Test fun `create Base64 hash`() {
         val hashWithExampleSalt = "gmr5AYx/SbAVYHshrPJj1ILm55PohJyS4ZZYBI4ZfB0="
-        Password.createBase64Hash(exampleSalt, "data to hash") shouldEqual hashWithExampleSalt
-        Password.createBase64Hash("other salt", "data to hash") shouldNotEqual hashWithExampleSalt
+        hash64(exampleSalt, exampleData) shouldEqual hashWithExampleSalt
+        hash64(exampleSalt, "other data") shouldNotEqual hashWithExampleSalt
+        hash64("other salt", exampleData) shouldNotEqual hashWithExampleSalt
     }
 
-    @Test fun `create pretty hash`() {
-        val hashWithExampleSalt = "uVpTDapDX6dcDDj1iTCJazHpVgsSi4ok0844OFhhCzz"
-        Password.createPrettyHash(exampleSalt, "data to hash") shouldEqual hashWithExampleSalt
-        Password.createPrettyHash("other salt", "data to hash") shouldNotEqual hashWithExampleSalt
+    @Test fun `create hash of different lengths`() {
+        listOf(10, 100, 1000) shouldAll {
+            passwordHasher = PasswordHasher(hashSize = it * 8)
+            hash(exampleSalt, exampleData).size shouldEqual it
+        }
     }
 
-    @Test fun `create readable hash`() {
-        val hashWithExampleSalt = "kxU4AFAtxg8YeweLVhc7REqDPrgbEiGPFHnzLqb8Cga2"
-        Password.createReadableHash(exampleSalt, "data to hash") shouldEqual hashWithExampleSalt
-        Password.createReadableHash("other salt", "data to hash") shouldNotEqual hashWithExampleSalt
+    @Test fun `create hash of with different number of iterations`() {
+        val hashes = listOf(10, 100, 1000).map {
+            passwordHasher = PasswordHasher(iterations = it)
+            hash64(exampleSalt, exampleData)
+        }
+        hashes shouldEqual hashes.toSet().toList()
     }
+
+    private fun hash64(salt: String, data: String) = hash(salt, data).toBase64()
+    private fun hash(salt: String, data: String) = passwordHasher.hash(salt, data)
 }
