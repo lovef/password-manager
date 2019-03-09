@@ -66,6 +66,11 @@ class DataNumberTest {
         DataNumber.fromBytes(0b0000_0000, 0b0100_1001).toStringOfChars("01") shouldEqual "0000000001001001"
     }
 
+    @Test fun `specific digits can be converted back to data number`() {
+        DataNumber("0000000001001001", "01") shouldEqual DataNumber.fromBytes(0b0000_0000, 0b0100_1001)
+        DataNumber("123", "0123456789ABCDEF") shouldEqual DataNumber(0x123)
+    }
+
     @Test fun `can take a hex number`() {
         val number = DataNumber(0x1234)
         (1..5).map { number.next(16) to number.value.toInt() } shouldEqual listOf(

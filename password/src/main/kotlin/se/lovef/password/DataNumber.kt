@@ -18,13 +18,25 @@ class DataNumber {
     constructor(bytes: ByteArray) {
         val clone = bytes.clone()
         value = BigInteger(1, clone)
-        clone[0] = -1
+        (0 until clone.size).forEach { clone[it] = -1 }//clone[0] = -1
         maxValue = BigInteger(1, clone)
     }
 
     constructor(data: DataNumber) {
         value = data.value
         maxValue = data.maxValue
+    }
+
+    constructor(number: String, digitChars: String) {
+        value = BigInteger.ZERO
+        maxValue = BigInteger.ZERO
+        val radix = BigInteger.valueOf(digitChars.length.toLong())
+        val digits = digitChars.mapIndexed { i, c -> c to BigInteger.valueOf(i.toLong()) }.toMap()
+        val maxDigit = digits.getValue(digitChars.last())
+        number.forEach {
+            value = value * radix + digits.getValue(it)
+            maxValue = maxValue * radix + maxDigit
+        }
     }
 
     fun toStringOfChars(chars: String): String {
@@ -70,6 +82,8 @@ class DataNumber {
         override fun next() = chars[next(radix)]
     }
 
+    override fun toString() = DataNumber(value).toStringOfChars("01").padStart(maxValue.toString(2).length, '0')//.reversed()
+    override fun toString() = DataNumber(value).toStringOfChars("01").padStart(maxValue.toString(2).length, '0')//.reversed()
     fun toString(radix: Int): String = value.toString(radix)
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -1,5 +1,6 @@
 package se.lovef.password.formatter
 
+import org.junit.Ignore
 import org.junit.Test
 import se.lovef.assert.v1.shouldEqual
 import se.lovef.password.DataNumber
@@ -21,6 +22,10 @@ class AlphaNumericFormatterTest {
         val data = DataNumber.fromBase64("lc2uUXt61Av4PtmvwIYu1jfcHq1PkotviQ1Udg==")
         val string = alphaNumericFormatter.format(data)
         string shouldEqual "7zMJdI31StX7omoggFdxG55e1YB5okCMsMIad8"
+    }
+
+    @Test @Ignore fun `formatted data can be decoded`() {
+        alphaNumericFormatter.decode(example) shouldEqual randomDataNumber
     }
 }
 
