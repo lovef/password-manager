@@ -70,7 +70,10 @@ class DataNumber {
         override fun next() = chars[next(radix)]
     }
 
+    override fun toString() = toStringOfChars("0123456789ABCDEF")
+
     fun toString(radix: Int): String = value.toString(radix)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
