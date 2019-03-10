@@ -124,6 +124,12 @@ class DataNumberTest {
         }
     }
 
+    @Test fun `data number can be converted to a string`() {
+        DataNumber.fromBytes(-1).toString() shouldEqual "FF"
+        DataNumber.fromBytes(0xF).toString() shouldEqual "0F"
+        DataNumber.fromBytes(0, -1).toString() shouldEqual "00FF"
+    }
+
     private infix fun List<Int>.sizeShouldEqual(other: List<Int>) {
         proveThat("size should equal:\n", this, '\n', other) {
             size shouldEqual other.size
