@@ -3,16 +3,10 @@ package se.lovef.password
 import org.junit.Test
 import se.lovef.assert.v1.shouldEqual
 import se.lovef.assert.v1.shouldNotEqual
+import se.lovef.password.formatter.DataNumberFormatter
 import se.lovef.password.hasher.Hasher
 
 class PasswordCompilerTest {
-
-    @Test fun `compile password hash of salt and password`() {
-        compiler()
-            .salt("salt")
-            .password("password")
-            .hash() shouldEqual hash("salt", "password")
-    }
 
     @Test fun `compile password hash of multiple components`() {
         compiler()
@@ -20,7 +14,7 @@ class PasswordCompilerTest {
             .salt("salt 2")
             .password("password 1")
             .password("password 2")
-            .hash() shouldEqual hash("salt 1\nsalt 2", "password 1\npassword 2")
+            .compile() shouldEqual hashAndFormat("salt 1\nsalt 2", "password 1\npassword 2")
     }
 
     @Test fun `salt order matters`() {
@@ -56,18 +50,22 @@ class PasswordCompilerTest {
 }
 
 private infix fun PasswordCompiler.hashShouldEqual(other: PasswordCompiler) {
-    hash() shouldEqual other.hash()
+    compile() shouldEqual other.compile()
 }
 
 private infix fun PasswordCompiler.hashShouldNotEqual(other: PasswordCompiler) {
-    hash() shouldNotEqual other.hash()
+    compile() shouldNotEqual other.compile()
 }
 
 private val hasher = object : Hasher {
     override fun hash(salt: String, data: String) = (salt + data).toByteArray()
 }
 
-private fun compiler() = PasswordCompiler(hasher)
+private val formatter = object : DataNumberFormatter {
+    override fun format(dataNumber: DataNumber) = dataNumber.toString()
+}
+
+private fun compiler() = PasswordCompiler(hasher, formatter)
 private fun PasswordCompiler.pwd() = password("password")
 private fun PasswordCompiler.pwd_1() = password("password 1")
 private fun PasswordCompiler.pwd_2() = password("password 2")
@@ -75,4 +73,4 @@ private fun PasswordCompiler.salt() = salt("salt")
 private fun PasswordCompiler.salt_1() = salt("salt 1")
 private fun PasswordCompiler.salt_2() = salt("salt 2")
 
-private fun hash(salt: String, password: String) = hasher.hash(salt, password)
+private fun hashAndFormat(salt: String, password: String) = formatter.format(hasher.hash(salt, password).toDataNumber())
