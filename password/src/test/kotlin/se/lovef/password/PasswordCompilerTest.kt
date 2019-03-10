@@ -57,11 +57,13 @@ private infix fun PasswordCompiler.hashShouldNotEqual(other: PasswordCompiler) {
     compile() shouldNotEqual other.compile()
 }
 
-private val hasher = object : Hasher {
+private val hasher = object : Hasher() {
+    override val configuration = "test-hasher"
     override fun hash(salt: String, data: String) = (salt + data).toByteArray()
 }
 
-private val formatter = object : DataNumberFormatter {
+private val formatter = object : DataNumberFormatter() {
+    override val configuration = "test-formatter"
     override fun format(dataNumber: DataNumber) = dataNumber.toString()
 }
 

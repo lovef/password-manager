@@ -46,6 +46,13 @@ class PasswordHasherTest {
         hashes shouldEqual hashes.toSet().toList()
     }
 
+    @Test fun `equality implementation`() {
+        PasswordHasher() shouldEqual PasswordHasher()
+        PasswordHasher() shouldNotEqual PasswordHasher(hashSize = 10)
+        PasswordHasher() shouldNotEqual PasswordHasher(iterations = 10)
+        PasswordHasher(1, 11) shouldNotEqual PasswordHasher(11, 1)
+    }
+
     private fun hash64(salt: String, data: String) = hash(salt, data).toBase64()
     private fun hash(salt: String, data: String) = passwordHasher.hash(salt, data)
 }

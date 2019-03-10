@@ -3,7 +3,9 @@ package se.lovef.password.formatter
 import se.lovef.password.DataNumber
 import se.lovef.password.plusAssign
 
-class NumberFormatter : DataNumberFormatter {
+class NumberFormatter : DataNumberFormatter() {
+
+    override val configuration = "number"
 
     override fun format(dataNumber: DataNumber): String {
         val length = dataNumber.next(3) + 1

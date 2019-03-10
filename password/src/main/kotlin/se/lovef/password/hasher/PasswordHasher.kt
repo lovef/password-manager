@@ -6,7 +6,9 @@ import javax.crypto.spec.PBEKeySpec
 class PasswordHasher(
     private val hashSize: Int = 256,
     private val iterations: Int = 0x1_0000
-) : Hasher {
+) : Hasher() {
+
+    override val configuration = "hash_${hashSize}_$iterations"
 
     override fun hash(salt: String, data: String): ByteArray {
         val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
@@ -15,6 +17,3 @@ class PasswordHasher(
     }
 }
 
-interface Hasher {
-    fun hash(salt: String, data: String): ByteArray
-}
