@@ -10,9 +10,9 @@ import se.lovef.assert.v1.shouldBeGreaterOrEqualTo
 import se.lovef.assert.v1.shouldEqual
 import se.lovef.assert.v1.shouldNotEqual
 import se.lovef.password.DataNumber
-import se.lovef.password.proveThat
-import se.lovef.password.randomBytes
-import se.lovef.password.randomDataNumber
+import se.lovef.test.proveThat
+import se.lovef.test.randomBytes
+import se.lovef.test.randomDataNumber
 import java.util.concurrent.TimeUnit
 
 class SentenceFormatterTest {

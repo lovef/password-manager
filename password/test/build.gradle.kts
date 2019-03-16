@@ -1,14 +1,16 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 plugins {
-    kotlin("jvm") version "1.3.21"
+    kotlin("jvm")
 }
 
 group = "se.lovef"
 
 dependencies {
     implementation(kotlin("stdlib"))
-    testImplementation(project(":password:test"))
+    implementation(project(":password"))
+    api("se.lovef:kotlin-assert-utils:0.8.2")
+    api("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
 }
 
 repositories {

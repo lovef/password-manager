@@ -3,8 +3,8 @@ package se.lovef.password.formatter
 import org.junit.Test
 import se.lovef.assert.v1.shouldEqual
 import se.lovef.password.DataNumber
-import se.lovef.password.randomDataNumber
-import se.lovef.password.shouldMatchEntire
+import se.lovef.test.randomDataNumber
+import se.lovef.test.shouldMatchEntire
 
 
 private val alphaNumericFormatter = AlphaNumericFormatter()

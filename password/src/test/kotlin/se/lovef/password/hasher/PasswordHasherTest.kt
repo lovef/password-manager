@@ -3,8 +3,8 @@ package se.lovef.password.hasher
 import org.junit.Test
 import se.lovef.assert.v1.shouldEqual
 import se.lovef.assert.v1.shouldNotEqual
-import se.lovef.password.shouldAll
-import se.lovef.password.toBase64
+import se.lovef.test.shouldAll
+import se.lovef.test.toBase64
 
 private const val exampleSalt = "" +
         "qfTujPRHfCgzAqbo6Ai6aBWCMtqBM9Qr89hsgyWQA9ufyAwvBe2xshhT4VEgiNnUBdHGMLZVGmQ6seQhrdjVnozGZ7uUEEZJNYHq" +
