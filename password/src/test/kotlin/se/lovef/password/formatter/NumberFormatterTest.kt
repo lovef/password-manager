@@ -4,7 +4,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
 import se.lovef.assert.v1.shouldEqual
-import se.lovef.password.*
+import se.lovef.password.DataNumber
+import se.lovef.test.proveThat
+import se.lovef.test.randomDataNumber
+import se.lovef.test.shouldAll
+import se.lovef.test.shouldMatchEntire
 import java.util.concurrent.TimeUnit
 
 private val digitPattern by lazy {

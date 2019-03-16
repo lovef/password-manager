@@ -1,1 +1,4 @@
-include("password")
+include(
+    "password",
+    "password:test"
+)

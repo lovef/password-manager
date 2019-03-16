@@ -3,7 +3,11 @@ package se.lovef.password.formatter
 import org.junit.Test
 import se.lovef.assert.v1.shouldEqual
 import se.lovef.assert.v1.shouldNotContain
-import se.lovef.password.*
+import se.lovef.password.DataNumber
+import se.lovef.password.Letters
+import se.lovef.test.randomDataNumber
+import se.lovef.test.shouldAll
+import se.lovef.test.shouldMatchEntire
 
 
 private val readableFormatter = ReadableFormatter()

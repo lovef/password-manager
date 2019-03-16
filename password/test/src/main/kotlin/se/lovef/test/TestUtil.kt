@@ -1,6 +1,7 @@
-package se.lovef.password
+package se.lovef.test
 
 import se.lovef.assert.v1.shouldBeTrue
+import se.lovef.password.DataNumber
 import java.math.BigInteger
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
