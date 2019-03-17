@@ -2,12 +2,24 @@ plugins {
     id("se.lovef.gradle.password-manager") version "{{VERSION}}"
 }
 
-System.setProperty("my-pwd", "my-password")
-
 passwordManager {
     saltDirectories "salt-1", "./salt-2"
 }
 
-println "Test password: " + passwordManager.get("my-pwd")
+task readFromSystemProperties {
+    doLast {
+        System.setProperty("my-pwd", "my-password")
+        assertPasswordIsCorrect()
+    }
+}
 
-assert passwordManager.get("my-pwd") == 'yxwacFZF5cbZKLUZk83CgMfuKfGNorPsypJ6ewfQsSAZ'
+task readFromGui {
+    doLast {
+        assertPasswordIsCorrect()
+    }
+}
+
+def assertPasswordIsCorrect() {
+    println "Test password: " + passwordManager.get("my-pwd")
+    assert passwordManager.get("my-pwd") == 'yxwacFZF5cbZKLUZk83CgMfuKfGNorPsypJ6ewfQsSAZ'
+}
