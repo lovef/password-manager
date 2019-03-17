@@ -123,7 +123,14 @@ task setupPluginTest(dependsOn: publish) {
 
 //noinspection GroovyAssignabilityCheck
 task testPlugin(type: GradleBuild, dependsOn: setupPluginTest, group: 'verification') {
+    check.dependsOn testPlugin
     buildFile = file('test-project/build.gradle')
+    tasks = ["readFromSystemProperties"]
 }
 
-check.dependsOn testPlugin
+//noinspection GroovyAssignabilityCheck
+task testPluginGui(type: GradleBuild, dependsOn: setupPluginTest, group: 'verification') {
+    buildFile = file('test-project/build.gradle')
+    tasks = ["readFromGui"]
+}
+
