@@ -4,8 +4,6 @@ plugins {
     kotlin("jvm") version "1.3.21"
 }
 
-group = "se.lovef"
-
 dependencies {
     implementation(kotlin("stdlib"))
     testImplementation(project(":password:test"))
