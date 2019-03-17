@@ -5,7 +5,7 @@ plugins {
 System.setProperty("my-pwd", "my-password")
 
 passwordManager {
-    saltDirectories "./salt-1", "./salt-2"
+    saltDirectories "salt-1", "./salt-2"
 }
 
 println "Test password: " + passwordManager.get("my-pwd")

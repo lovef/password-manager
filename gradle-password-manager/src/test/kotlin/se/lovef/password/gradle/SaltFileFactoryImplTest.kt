@@ -15,7 +15,9 @@ class SaltFileFactoryImplTest {
 
     @Test fun `get salt file relative to project dir`() {
         get(".") shouldEqual SaltFileImpl(passwordIdentifier, absoluteProjectDir)
+        get("sub") shouldEqual SaltFileImpl(passwordIdentifier, File(absoluteProjectDir, "sub"))
         get("./sub") shouldEqual SaltFileImpl(passwordIdentifier, File(absoluteProjectDir, "sub"))
+        get("sub.dir") shouldEqual SaltFileImpl(passwordIdentifier, File(absoluteProjectDir, "sub.dir"))
     }
 
     @Test fun `get salt file relative to home dir`() {
