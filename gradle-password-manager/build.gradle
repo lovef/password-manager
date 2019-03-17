@@ -1,29 +1,44 @@
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.3.21"
-    id 'java-gradle-plugin'
     id("com.palantir.idea-test-fix") version "0.1.0"
-    
-    // Will be needed for publish
-//    id("org.jetbrains.dokka") version "0.9.17"
-//    id("com.jfrog.bintray") version "1.8.0"
-//    id("maven-publish")
-//    id("java-library")
+
+    id("java-gradle-plugin")
+    id("maven-publish")
+    id("org.jetbrains.dokka") version "0.9.17"
 }
 
 
 description = "Experimental Gradle Password Manager Plugin"
 def baseName = "password-manager"
+group = "${rootProject.group}.gradle"
+
 
 println("$group:$baseName:$version")
 
+configurations {
+    sourced
+}
+
+
 dependencies {
+    sourced(project(":password"))
+
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
     implementation(gradleApi())
-    implementation(project(":password"))
 
     testImplementation(gradleTestKit())
     testImplementation(project(":password:test"))
+}
+
+configurations.sourced.allDependencies.each {
+    evaluationDependsOn(it.dependencyProject.path)
+
+    sourceSets.main.java.srcDir it.dependencyProject.sourceSets.main.java
+    sourceSets.main.kotlin.srcDir it.dependencyProject.sourceSets.main.kotlin
+    it.dependencyProject.configurations.api.allDependencies.each {
+        dependencies.api it
+    }
 }
 
 repositories {
@@ -59,3 +74,56 @@ test {
 }
 
 check.dependsOn functionalTest
+
+
+//noinspection GroovyAssignabilityCheck,GrUnresolvedAccess
+task sourceJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+//noinspection GroovyAssignabilityCheck,GrUnresolvedAccess
+task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    outputFormat = 'javadoc'
+    outputDirectory = "$buildDir/javadoc"
+}
+
+//noinspection GroovyAssignabilityCheck,GrUnresolvedAccess
+task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
+    classifier = 'javadoc'
+    from "$buildDir/javadoc"
+}
+
+def mavenDir = "build/repo"
+
+gradlePlugin {
+    plugins {
+        passwordManager {
+            id = "${group}.password-manager"
+            println id
+            implementationClass = "se.lovef.password.gradle.GradlePasswordManagerPlugin"
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven { url mavenDir }
+    }
+}
+
+
+//noinspection GroovyAssignabilityCheck
+task setupPluginTest(dependsOn: publish) {
+    doLast {
+        def template = file('test-project/build.template.gradle').text
+        file('test-project/build.gradle').text = template.replace("{{VERSION}}", version)
+    }
+}
+
+//noinspection GroovyAssignabilityCheck
+task testPlugin(type: GradleBuild, dependsOn: setupPluginTest, group: 'verification') {
+    buildFile = file('test-project/build.gradle')
+}
+
+check.dependsOn testPlugin
