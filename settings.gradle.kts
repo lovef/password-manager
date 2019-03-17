@@ -1,5 +1,5 @@
 include(
     "password",
     "password:test",
-    "gradle-plugin"
+    "gradle-password-manager"
 )
