@@ -48,7 +48,7 @@ class GradleGitVersionPluginGroovyTest {
         buildGradle += /* language=groovy */ """
             passwordManager {
                 saltDirectory "~/pwd"
-                saltDirectory "./pwd"
+                saltDirectory "pwd"
             }
             println 'password1: ' + passwordManager.get('password1') + ', ' + passwordManager.get('password1')
             println 'password2: ' + passwordManager.get('password2')
