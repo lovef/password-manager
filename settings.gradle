@@ -1,5 +1,6 @@
 include(
     "password",
     "password:test",
-    "gradle-password-manager"
+//    "gradle-password-manager",
+    "pwdmngr"
 )

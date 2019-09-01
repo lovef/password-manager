@@ -1,0 +1,22 @@
+
+plugins {
+    id "org.jetbrains.kotlin.jvm"
+    id "application"
+}
+
+description = "Experimental CLI password manager"
+
+application {
+    mainClassName = 'se.lovef.password.cli.CliKt'
+}
+
+dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-stdlib")
+    implementation(project(":password"))
+
+    testImplementation(project(":password:test"))
+}
+
+repositories {
+    mavenCentral()
+}

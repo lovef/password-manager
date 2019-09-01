@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+# Wrapper for CLI
+# Installation example:
+# ./gradlew pwdmngr:installDist && cp -r pwdmngr/build/install/pwdmngr/ ~/libexec/ && cp pwdmngr/pwdmngr ~/bin/
+~/libexec/pwdmngr/bin/pwdmngr $*
